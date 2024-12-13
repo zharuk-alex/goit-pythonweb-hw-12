@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
 from slowapi.errors import RateLimitExceeded
-from src.api import contacts, utils, auth, users
+from src.api import contacts, utils, auth, users, admin_panel
 
 app = FastAPI()
 origins = ["*"]
@@ -27,6 +27,7 @@ app.include_router(contacts.router, prefix="/api")
 app.include_router(utils.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
 app.include_router(users.router, prefix="/api")
+app.include_router(admin_panel.router, prefix="/api")
 
 if __name__ == "__main__":
     import uvicorn

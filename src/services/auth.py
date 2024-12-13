@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 
 from src.database.db import get_db
+from src.database.models import User, UserRole
 from src.conf.config import settings
 from src.services.users import UserService
 
@@ -108,6 +109,12 @@ async def get_current_user(
     if user is None:
         raise credentials_exception
     return user
+
+
+def get_current_admin_user(current_user: User = Depends(get_current_user)):
+    if current_user.role != UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Недостатньо прав доступу")
+    return current_user
 
 
 def create_email_token(data: dict) -> str:
