@@ -25,7 +25,9 @@ class Contact(Base):
     )
 
     user_id = Column(
-        "user_id", ForeignKey("users.id", ondelete="CASCADE"), default=None
+        Integer,
+        ForeignKey("users.id", ondelete="CASCADE", name="fk_contacts_user_id"),
+        default=None,
     )
     user = relationship("User", backref="contacts")
 

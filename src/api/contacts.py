@@ -93,9 +93,10 @@ async def patch_phone(
     contact_id: int,
     body: ContactPhoneUpdate,
     db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
 ):
     contact_service = ContactService(db)
-    contact = await contact_service.update_phone(contact_id, body.phone)
+    contact = await contact_service.update_phone(contact_id, body.phone, user)
     if not contact:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found"
@@ -108,9 +109,10 @@ async def patch_email(
     contact_id: int,
     body: ContactEmailUpdate,
     db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
 ):
     contact_service = ContactService(db)
-    contact = await contact_service.update_email(contact_id, body.email)
+    contact = await contact_service.update_email(contact_id, body.email, user)
     if not contact:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found"
@@ -119,9 +121,13 @@ async def patch_email(
 
 
 @router.delete("/{contact_id}", response_model=ContactResponse)
-async def remove_contact(contact_id: int, db: AsyncSession = Depends(get_db)):
+async def remove_contact(
+    contact_id: int,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
     contact_service = ContactService(db)
-    contact = await contact_service.remove_contact(contact_id)
+    contact = await contact_service.remove_contact(contact_id, user)
     if contact is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found"

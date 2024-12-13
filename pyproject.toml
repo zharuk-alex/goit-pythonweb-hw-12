@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "goit-pythonweb-hw-10"
+name = "goit-pythonweb-hw-12"
 version = "0.1.0"
 description = ""
 authors = ["zharuk.alex <zzharuk@gmail.com>"]
@@ -7,24 +7,39 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-asyncpg = "^0.30.0"
-sqlalchemy = "^2.0.36"
-alembic = "^1.14.0"
-asyncio = "^3.4.3"
-greenlet = "^3.1.1"
-fastapi = { extras = ["standard"], version = "^0.115.5" }
-unicorn = { extras = ["standard"], version = "^2.1.1" }
-pydantic-settings = "^2.6.1"
-slowapi = "^0.1.9"
-cloudinary = "^1.41.0"
-passlib = {extras = ["bcrypt"], version = "^1.7.4"}
-starlette = "^0.41.3"
+sqlalchemy = "^2.0.31"
+black = "^24.4.2"
+fastapi = "^0.111.0"
+aiosqlite = "^0.20.0"
+alembic = "^1.13.2"
+psycopg2 = "^2.9.9"
+asyncpg = "^0.29.0"
 python-jose = { extras = ["cryptography"], version = "^3.3.0" }
-fastapi-mail = "^1.4.2"
+passlib = { extras = ["bcrypt"], version = "^1.7.4" }
 libgravatar = "^1.0.4"
-bcrypt = "^4.2.1"
+pydantic-settings = "^2.5.2"
+slowapi = "^0.1.9"
+redis = "^5.0.8"
+fastapi-mail = "^1.4.1"
+cloudinary = "^1.41.0"
+pytest = "^8.3.3"
+pytest-mock = "^3.14.0"
+requests = "^2.32.3"
+pytest-asyncio = "^0.24.0"
+pytest-cov = "^5.0.0"
+greenlet = "^3.1.1"
+asyncio = "^3.4.3"
 
+
+[tool.poetry.group.dev.dependencies]
+sphinx = "^8.0.2"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = "."
+filterwarnings = "ignore::DeprecationWarning:jose.*"
+asyncio_default_fixture_loop_scope = "function"
+asyncio_mode = "auto"
