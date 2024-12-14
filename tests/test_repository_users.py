@@ -15,20 +15,15 @@ async def test_get_user_by_email(async_session: AsyncSession):
     Returns:
         None
     """
-    # Arrange: Створення користувача
     test_email = "testuser@example.com"
     user_data = UserCreate(
-        username="testuser",
-        email=test_email,
-        password="hashed_password",
+        username="testuser", email=test_email, password="hashed_password", role="user"
     )
     user_repo = UserRepository(async_session)
     created_user = await user_repo.create_user(user_data)
 
-    # Act: Отримання користувача за email
     fetched_user = await user_repo.get_user_by_email(test_email)
 
-    # Assert: Перевірка даних
     assert fetched_user is not None, "Користувач не знайдений"
     assert fetched_user.email == created_user.email, "Email користувача не збігається"
     assert (

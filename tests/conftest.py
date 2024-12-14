@@ -28,6 +28,7 @@ test_user = {
     "username": "deadpool",
     "email": "deadpool@example.com",
     "password": "12345678",
+    "role": "user",
 }
 
 
@@ -37,6 +38,7 @@ def init_models_wrap():
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.drop_all)
             await conn.run_sync(Base.metadata.create_all)
+
         async with TestingSessionLocal() as session:
             hash_password = Hash().get_password_hash(test_user["password"])
             current_user = User(

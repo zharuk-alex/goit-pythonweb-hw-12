@@ -10,6 +10,7 @@ user_data = {
     "username": "agent007",
     "email": "agent007@gmail.com",
     "password": "12345678",
+    "role": "user",
 }
 
 
@@ -53,6 +54,7 @@ async def test_login(client):
         current_user = await session.execute(
             select(User).where(User.email == user_data.get("email"))
         )
+        print(user_data.get("email"))
         current_user = current_user.scalar_one_or_none()
         if current_user:
             current_user.confirmed = True
@@ -98,3 +100,31 @@ def test_validation_error_login(client):
     assert response.status_code == 422, response.text
     data = response.json()
     assert "detail" in data
+
+
+@pytest.mark.asyncio
+async def test_request_password_reset_success(client, monkeypatch):
+    mock_send_email = Mock()
+    monkeypatch.setattr("src.api.auth.send_email", mock_send_email)
+
+    body = {"email": user_data.get("email")}
+    response = client.post("api/auth/request_password_reset", json=body)
+
+    assert response.status_code == 200, response.text
+    assert response.json() == {
+        "message": "Лист для скидання пароля надіслано на вашу електронну адресу"
+    }
+    mock_send_email.assert_called_once()
+
+
+@pytest.mark.asyncio
+async def test_request_password_reset_user_not_found(client, monkeypatch):
+    mock_send_email = Mock()
+    monkeypatch.setattr("src.api.auth.send_email", mock_send_email)
+
+    body = {"email": "nonexistent@example.com"}
+    response = client.post("api/auth/request_password_reset", json=body)
+
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Користувач не знайдений"}
+    mock_send_email.assert_not_called()
